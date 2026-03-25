@@ -44,6 +44,16 @@ $ pnpm run start:dev
 $ pnpm run start:prod
 ```
 
+## Environment variables
+
+This service requires a Telegram bot token at runtime.
+
+Set one of these variables (first non-empty value is used):
+
+- `TELEGRAM_BOT_TOKEN` (recommended)
+- `TELEGRAM_TOKEN`
+- `BOT_TOKEN`
+
 ## Run tests
 
 ```bash

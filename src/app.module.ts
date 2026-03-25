@@ -7,6 +7,26 @@ import { BotUpdate } from './bot.update';
 import { LanguageService } from './language.service';
 import { TelegramBotLauncherService } from './telegram-bot-launcher.service';
 
+const TELEGRAM_BOT_TOKEN_KEYS = [
+  'TELEGRAM_BOT_TOKEN',
+  'TELEGRAM_TOKEN',
+  'BOT_TOKEN',
+] as const;
+
+function resolveTelegramBotToken(configService: ConfigService): string {
+  for (const key of TELEGRAM_BOT_TOKEN_KEYS) {
+    const rawValue = configService.get<string>(key);
+    const token = rawValue?.trim();
+    if (token) {
+      return token;
+    }
+  }
+
+  throw new Error(
+    `Missing Telegram bot token. Set one of: ${TELEGRAM_BOT_TOKEN_KEYS.join(', ')}`,
+  );
+}
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -15,7 +35,7 @@ import { TelegramBotLauncherService } from './telegram-bot-launcher.service';
     TelegrafModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
-        token: configService.get<string>('TELEGRAM_BOT_TOKEN')!,
+        token: resolveTelegramBotToken(configService),
         launchOptions: false,
       }),
       inject: [ConfigService],
