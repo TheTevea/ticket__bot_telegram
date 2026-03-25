@@ -4,6 +4,7 @@ import { TelegrafModule } from 'nestjs-telegraf';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { BotUpdate } from './bot.update';
+import { LanguageService } from './language.service';
 import { TelegramBotLauncherService } from './telegram-bot-launcher.service';
 
 @Module({
@@ -21,6 +22,11 @@ import { TelegramBotLauncherService } from './telegram-bot-launcher.service';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService, BotUpdate, TelegramBotLauncherService],
+  providers: [
+    AppService,
+    BotUpdate,
+    LanguageService,
+    TelegramBotLauncherService,
+  ],
 })
 export class AppModule {}
