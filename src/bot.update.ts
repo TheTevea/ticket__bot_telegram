@@ -243,21 +243,15 @@ export class BotUpdate {
 
       return searchableFields.some((value) => value.includes(query));
     }).map((item) => ({
-      type: 'article' as const,
+      type: 'photo' as const,
       id: item.id,
+      photo_url: item.thumbnailUrl,
       thumbnail_url: item.thumbnailUrl,
-      thumbnail_width: 200,
-      thumbnail_height: 200,
+      photo_width: 800,
+      photo_height: 600,
       title: `${item.price} – ${item.title[language]}`,
       description: item.description[language],
-      input_message_content: {
-        message_text: `${item.title[language]}\n${item.description[language]}`,
-        link_preview_options: {
-          url: item.thumbnailUrl,
-          prefer_large_media: true,
-          show_above_text: true,
-        },
-      },
+      caption: `${item.title[language]}\n${item.description[language]}`,
       reply_markup: {
         inline_keyboard: [
           [
