@@ -243,13 +243,23 @@ export class BotUpdate {
 
       return searchableFields.some((value) => value.includes(query));
     }).map((item) => ({
-      type: 'photo' as const,
+      type: 'article' as const,
       id: item.id,
-      photo_url: item.thumbnailUrl,
-      thumbnail_url: item.thumbnailUrl,
       title: `${item.price} – ${item.title[language]}`,
       description: item.description[language],
-      caption: `${item.title[language]}\n${item.description[language]}`,
+      thumbnail_url: item.thumbnailUrl,
+      thumbnail_width: 100,
+      thumbnail_height: 100,
+      input_message_content: {
+        message_text: [
+          `<b>${item.title[language]}</b>`,
+          `${item.description[language]}`,
+          '',
+          `💰 <b>${item.price}</b>`,
+          `<a href="${item.thumbnailUrl}">&#8205;</a>`,
+        ].join('\n'),
+        parse_mode: 'HTML' as const,
+      },
       reply_markup: {
         inline_keyboard: [
           [
