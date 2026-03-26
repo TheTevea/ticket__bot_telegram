@@ -1,4 +1,5 @@
 import { Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import {
   Action,
   Command,
@@ -22,6 +23,9 @@ interface InlineCatalogItem {
   description: LocalizedInlineText;
   messageText: LocalizedInlineText;
   keywords: string[];
+  thumbnailUrl: string;
+  price: string;
+  buyUrl: string;
 }
 
 const START_MESSAGES: Record<BotLanguage, string> = {
@@ -50,78 +54,133 @@ const LANGUAGE_CHANGED_MESSAGES: Record<BotLanguage, string> = {
 
 const INLINE_CATALOG_ITEMS: InlineCatalogItem[] = [
   {
-    id: 'book-ticket',
+    id: 'domestic-12-months',
     title: {
-      km: 'កក់សំបុត្រ',
-      en: 'Book Ticket',
-      zh: '预订车票',
+      km: 'កញ្ចប់ធ្វើដំណើរក្នុងស្រុក (កម្ពុជា) ១២ ខែ',
+      en: 'Domestic Travel Package (Cambodia) 12 Months',
+      zh: '国内旅行套餐（柬埔寨）12个月',
     },
     description: {
-      km: 'បើក Mini App ដើម្បីកក់សំបុត្រ',
-      en: 'Open Mini App to book your trip',
-      zh: '打开小程序预订您的行程',
+      km: 'កញ្ចប់ធ្វើដំណើរក្នុងស្រុក ១២ ខែ សម្រាប់ធ្វើដំណើរគ្មានដែនកំណត់ទូទាំងកម្ពុជា – $350',
+      en: 'This domestic travel package 12 Months aims to save travel costs for local tourists, expatriates, private companies, NGOs, and students – $350',
+      zh: '国内旅行套餐12个月，旨在为当地游客、外籍人士、私营企业、非政府组织和学生节省旅行费用 – $350',
     },
     messageText: {
-      km: '🎫 កក់សំបុត្រជាមួយ Ticket Mini App',
-      en: '🎫 Book your ticket with Ticket Mini App',
-      zh: '🎫 使用 Ticket Mini App 预订车票',
+      km: '📦 កញ្ចប់ធ្វើដំណើរក្នុងស្រុក (កម្ពុជា) ១២ ខែ – $350 USD',
+      en: '📦 Domestic Travel Package (Cambodia) 12 Months – 350 USD',
+      zh: '📦 国内旅行套餐（柬埔寨）12个月 – 350 美元',
     },
     keywords: [
-      'book',
-      'ticket',
-      'route',
-      'seat',
-      'កក់',
-      'សំបុត្រ',
-      '预订',
-      '车票',
+      'domestic',
+      'package',
+      '12 months',
+      'yearly',
+      'cambodia',
+      '$350',
+      'កញ្ចប់',
+      'ក្នុងស្រុក',
+      '国内',
+      '套餐',
+      '12个月',
     ],
+    thumbnailUrl:
+      'https://onlineparking.asia/wp-content/uploads/2025/03/12months-1.png',
+    price: '$350',
+    buyUrl: '/package/domestic-12-months',
   },
   {
-    id: 'my-tickets',
+    id: 'domestic-6-months',
     title: {
-      km: 'សំបុត្ររបស់ខ្ញុំ',
-      en: 'My Tickets',
-      zh: '我的车票',
+      km: 'កញ្ចប់ធ្វើដំណើរក្នុងស្រុក (កម្ពុជា) ៦ ខែ',
+      en: 'Domestic Travel Package (Cambodia) 6 Months',
+      zh: '国内旅行套餐（柬埔寨）6个月',
     },
     description: {
-      km: 'ពិនិត្យសំបុត្រដែលបានកក់',
-      en: 'Check your booked tickets',
-      zh: '查看您已预订的车票',
+      km: 'កញ្ចប់ធ្វើដំណើរក្នុងស្រុក ៦ ខែ សម្រាប់ធ្វើដំណើរគ្មានដែនកំណត់ទូទាំងកម្ពុជា – $175',
+      en: 'This domestic travel package 6 Months aims to save travel fees for international and local tourists visiting Cambodia by offering unlimited trips – $175',
+      zh: '国内旅行套餐6个月，旨在通过提供无限次旅行为国际和当地游客节省旅行费用 – $175',
     },
     messageText: {
-      km: '🧾 សូមបើក Ticket Mini App ដើម្បីមើលសំបុត្ររបស់អ្នក',
-      en: '🧾 Open Ticket Mini App to view your tickets',
-      zh: '🧾 打开 Ticket Mini App 查看您的车票',
+      km: '📦 កញ្ចប់ធ្វើដំណើរក្នុងស្រុក (កម្ពុជា) ៦ ខែ – $175 USD',
+      en: '📦 Domestic Travel Package (Cambodia) 6 Months – 175 USD',
+      zh: '📦 国内旅行套餐（柬埔寨）6个月 – 175 美元',
     },
-    keywords: ['my', 'tickets', 'booking', 'សំបុត្រ', '我的', '车票'],
+    keywords: [
+      'domestic',
+      'package',
+      '6 months',
+      'half year',
+      'cambodia',
+      '$175',
+      'កញ្ចប់',
+      'ក្នុងស្រុក',
+      '国内',
+      '套餐',
+      '6个月',
+    ],
+    thumbnailUrl:
+      'https://onlineparking.asia/wp-content/uploads/2025/03/6monthss.png',
+    price: '$175',
+    buyUrl: '/package/domestic-6-months',
   },
   {
-    id: 'support',
+    id: 'international-30-days',
     title: {
-      km: 'ជំនួយ',
-      en: 'Support',
-      zh: '客服支持',
+      km: 'កញ្ចប់ធ្វើដំណើរអន្តរជាតិ (កម្ពុជា-ថៃ-វៀតណាម-ឡាវ) ៣០ ថ្ងៃ',
+      en: 'International Travel Package (Cambodia-Thailand-Vietnam-Laos) 30 Days',
+      zh: '国际旅行套餐（柬埔寨-泰国-越南-老挝）30天',
     },
     description: {
-      km: 'ទាក់ទងក្រុមជំនួយអតិថិជន',
-      en: 'Contact customer support team',
-      zh: '联系客户支持团队',
+      km: 'កញ្ចប់ធ្វើដំណើរអន្តរជាតិ ៣០ ថ្ងៃ សម្រាប់ធ្វើដំណើរគ្មានដែនកំណត់ក្នុង ៤ ប្រទេស – $90',
+      en: 'Our International Travel Package is designed to save on travel fees for both local and international tourists with unlimited trips for 30 days – $90',
+      zh: '国际旅行套餐旨在为当地和国际游客节省旅行费用，提供30天无限次旅行 – $90',
     },
     messageText: {
-      km: '🆘 ត្រូវការជំនួយ? Telegram: @ticket_support',
-      en: '🆘 Need help? Telegram: @ticket_support',
-      zh: '🆘 需要帮助？Telegram：@ticket_support',
+      km: '🌏 កញ្ចប់ធ្វើដំណើរអន្តរជាតិ (កម្ពុជា-ថៃ-វៀតណាម-ឡាវ) ៣០ ថ្ងៃ – $90 USD',
+      en: '🌏 International Travel Package (Cambodia-Thailand-Vietnam-Laos) 30 Days – 90 USD',
+      zh: '🌏 国际旅行套餐（柬埔寨-泰国-越南-老挝）30天 – 90 美元',
     },
-    keywords: ['help', 'support', 'contact', 'ជំនួយ', '客服'],
+    keywords: [
+      'international',
+      'package',
+      '30 days',
+      'monthly',
+      'cambodia',
+      'thailand',
+      'vietnam',
+      'laos',
+      '$90',
+      'កញ្ចប់',
+      'អន្តរជាតិ',
+      '国际',
+      '套餐',
+      '30天',
+    ],
+    thumbnailUrl:
+      'https://onlineparking.asia/wp-content/uploads/2025/03/30days-1.png',
+    price: '$90',
+    buyUrl: '/package/international-30-days',
   },
 ];
+
+const BUY_NOW_LABELS: Record<BotLanguage, string> = {
+  km: '🛒 ទិញឥឡូវ',
+  en: '🛒 Buy Now',
+  zh: '🛒 立即购买',
+};
 
 @Update()
 export class BotUpdate {
   private readonly logger = new Logger(BotUpdate.name);
+  private readonly miniAppUrl: string;
 
-  constructor(private readonly languageService: LanguageService) {}
+  constructor(
+    private readonly languageService: LanguageService,
+    private readonly configService: ConfigService,
+  ) {
+    this.miniAppUrl =
+      this.configService.get<string>('MINI_APP_URL') ?? 'https://example.com';
+  }
 
   @Start()
   async onStart(@Ctx() ctx: Context) {
@@ -189,10 +248,23 @@ export class BotUpdate {
     }).map((item) => ({
       type: 'article' as const,
       id: item.id,
-      title: item.title[language],
+      title: `${item.price} – ${item.title[language]}`,
       description: item.description[language],
+      thumbnail_url: item.thumbnailUrl,
+      thumbnail_width: 200,
+      thumbnail_height: 200,
       input_message_content: {
-        message_text: item.messageText[language],
+        message_text: `${item.messageText[language]}\n\n💰 ${item.price}`,
+      },
+      reply_markup: {
+        inline_keyboard: [
+          [
+            {
+              text: BUY_NOW_LABELS[language],
+              url: `${this.miniAppUrl}${item.buyUrl}`,
+            },
+          ],
+        ],
       },
     }));
 
