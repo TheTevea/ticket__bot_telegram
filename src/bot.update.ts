@@ -256,7 +256,7 @@ export class BotUpdate {
           `${item.description[language]}`,
           '',
           `💰 <b>${item.price}</b>`,
-          `<a href="${item.thumbnailUrl}">&#8205;</a>`,
+          `<a href="${item.thumbnailUrl}"></a>`,
         ].join('\n'),
         parse_mode: 'HTML' as const,
       },
