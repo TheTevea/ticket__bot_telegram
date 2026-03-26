@@ -83,7 +83,8 @@ const INLINE_CATALOG_ITEMS: InlineCatalogItem[] = [
       '套餐',
       '12个月',
     ],
-    thumbnailUrl: 'https://oc.utlog.net/public/travel_package/831508372.png',
+    thumbnailUrl:
+      'https://oc.utlog.net/public/travel_package/831508372.png',
     price: '$350',
     buyUrl: '/package/domestic-12-months',
   },
@@ -117,7 +118,8 @@ const INLINE_CATALOG_ITEMS: InlineCatalogItem[] = [
       '套餐',
       '6个月',
     ],
-    thumbnailUrl: 'https://oc.utlog.net/public/travel_package/1190708355.jpg',
+    thumbnailUrl:
+      'https://oc.utlog.net/public/travel_package/1190708355.jpg',
     price: '$175',
     buyUrl: '/package/domestic-6-months',
   },
@@ -154,16 +156,17 @@ const INLINE_CATALOG_ITEMS: InlineCatalogItem[] = [
       '套餐',
       '30天',
     ],
-    thumbnailUrl: 'https://oc.utlog.net/public/travel_package/248436554.png',
+    thumbnailUrl:
+      'https://oc.utlog.net/public/travel_package/248436554.png',
     price: '$90',
     buyUrl: '/package/international-30-days',
   },
 ];
 
-const PAY_LABELS: Record<BotLanguage, string> = {
-  km: 'Pay',
-  en: 'Pay',
-  zh: '支付',
+const BUY_NOW_LABELS: Record<BotLanguage, string> = {
+  km: '🛒 ទិញឥឡូវ',
+  en: '🛒 Buy Now',
+  zh: '🛒 立即购买',
 };
 
 @Update()
@@ -243,20 +246,21 @@ export class BotUpdate {
 
       return searchableFields.some((value) => value.includes(query));
     }).map((item) => ({
-      type: 'photo' as const,
+      type: 'article' as const,
       id: item.id,
-      photo_url: item.thumbnailUrl,
-      thumbnail_url: item.thumbnailUrl,
-      photo_width: 800,
-      photo_height: 600,
       title: `${item.price} – ${item.title[language]}`,
       description: item.description[language],
-      caption: `${item.title[language]}\n${item.description[language]}`,
+      thumbnail_url: item.thumbnailUrl,
+      thumbnail_width: 200,
+      thumbnail_height: 200,
+      input_message_content: {
+        message_text: `${item.messageText[language]}\n\n💰 ${item.price}`,
+      },
       reply_markup: {
         inline_keyboard: [
           [
             {
-              text: `${PAY_LABELS[language]} ${item.price}`,
+              text: BUY_NOW_LABELS[language],
               url: `${this.miniAppUrl}${item.buyUrl}`,
             },
           ],
