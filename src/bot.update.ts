@@ -84,7 +84,7 @@ const INLINE_CATALOG_ITEMS: InlineCatalogItem[] = [
       '12个月',
     ],
     thumbnailUrl:
-      'https://onlineparking.asia/wp-content/uploads/2025/03/12months-1.png',
+      'https://oc.utlog.net/public/travel_package/831508372.png',
     price: '$350',
     buyUrl: '/package/domestic-12-months',
   },
@@ -119,7 +119,7 @@ const INLINE_CATALOG_ITEMS: InlineCatalogItem[] = [
       '6个月',
     ],
     thumbnailUrl:
-      'https://onlineparking.asia/wp-content/uploads/2025/03/6monthss.png',
+      'https://oc.utlog.net/public/travel_package/1190708355.jpg',
     price: '$175',
     buyUrl: '/package/domestic-6-months',
   },
@@ -157,7 +157,7 @@ const INLINE_CATALOG_ITEMS: InlineCatalogItem[] = [
       '30天',
     ],
     thumbnailUrl:
-      'https://onlineparking.asia/wp-content/uploads/2025/03/30days-1.png',
+      'https://oc.utlog.net/public/travel_package/248436554.png',
     price: '$90',
     buyUrl: '/package/international-30-days',
   },
