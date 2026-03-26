@@ -252,11 +252,9 @@ export class BotUpdate {
       thumbnail_height: 100,
       input_message_content: {
         message_text: [
+          `<a href="${item.thumbnailUrl}">&#8205;</a>`,
           `<b>${item.title[language]}</b>`,
           `${item.description[language]}`,
-          '',
-          `💰 <b>${item.price}</b>`,
-          `<a href="${item.thumbnailUrl}">&#8205;</a>`,
         ].join('\n'),
         parse_mode: 'HTML' as const,
       },
