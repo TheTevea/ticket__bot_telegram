@@ -1,10 +1,28 @@
 import { Logger } from '@nestjs/common';
-import { Action, Command, Ctx, Help, Start, Update } from 'nestjs-telegraf';
+import {
+  Action,
+  Command,
+  Ctx,
+  Help,
+  InlineQuery,
+  Start,
+  Update,
+} from 'nestjs-telegraf';
 import { Context, Markup } from 'telegraf';
 import { BotLanguage, LanguageService } from './language.service';
 
 const LANGUAGE_MENU_TEXT =
   '🌐 Please choose your language / សូមជ្រើសរើសភាសា / 请选择语言';
+
+type LocalizedInlineText = Record<BotLanguage, string>;
+
+interface InlineCatalogItem {
+  id: string;
+  title: LocalizedInlineText;
+  description: LocalizedInlineText;
+  messageText: LocalizedInlineText;
+  keywords: string[];
+}
 
 const START_MESSAGES: Record<BotLanguage, string> = {
   km: '🚌 រីករាយដែលបានជួបអ្នកនៅ Ticket Mini App! រៀបចំគម្រោងធ្វើដំណើររបស់អ្នកឱ្យកាន់តែងាយស្រួល និងរហ័ស។ ដើម្បីជ្រើសរើសជើងឡាន និងកន្លែងអង្គុយដែលអ្នកពេញចិត្ត សូមចុចប៊ូតុង "កក់សំបុត្រ" ខាងក្រោម។ សូមជូនពរឱ្យអ្នកមានដំណើរដ៏រីករាយ!',
@@ -29,6 +47,75 @@ const LANGUAGE_CHANGED_MESSAGES: Record<BotLanguage, string> = {
   en: '✅ Language has been changed to English',
   zh: '✅ 语言已切换为中文',
 };
+
+const INLINE_CATALOG_ITEMS: InlineCatalogItem[] = [
+  {
+    id: 'book-ticket',
+    title: {
+      km: 'កក់សំបុត្រ',
+      en: 'Book Ticket',
+      zh: '预订车票',
+    },
+    description: {
+      km: 'បើក Mini App ដើម្បីកក់សំបុត្រ',
+      en: 'Open Mini App to book your trip',
+      zh: '打开小程序预订您的行程',
+    },
+    messageText: {
+      km: '🎫 កក់សំបុត្រជាមួយ Ticket Mini App',
+      en: '🎫 Book your ticket with Ticket Mini App',
+      zh: '🎫 使用 Ticket Mini App 预订车票',
+    },
+    keywords: [
+      'book',
+      'ticket',
+      'route',
+      'seat',
+      'កក់',
+      'សំបុត្រ',
+      '预订',
+      '车票',
+    ],
+  },
+  {
+    id: 'my-tickets',
+    title: {
+      km: 'សំបុត្ររបស់ខ្ញុំ',
+      en: 'My Tickets',
+      zh: '我的车票',
+    },
+    description: {
+      km: 'ពិនិត្យសំបុត្រដែលបានកក់',
+      en: 'Check your booked tickets',
+      zh: '查看您已预订的车票',
+    },
+    messageText: {
+      km: '🧾 សូមបើក Ticket Mini App ដើម្បីមើលសំបុត្ររបស់អ្នក',
+      en: '🧾 Open Ticket Mini App to view your tickets',
+      zh: '🧾 打开 Ticket Mini App 查看您的车票',
+    },
+    keywords: ['my', 'tickets', 'booking', 'សំបុត្រ', '我的', '车票'],
+  },
+  {
+    id: 'support',
+    title: {
+      km: 'ជំនួយ',
+      en: 'Support',
+      zh: '客服支持',
+    },
+    description: {
+      km: 'ទាក់ទងក្រុមជំនួយអតិថិជន',
+      en: 'Contact customer support team',
+      zh: '联系客户支持团队',
+    },
+    messageText: {
+      km: '🆘 ត្រូវការជំនួយ? Telegram: @ticket_support',
+      en: '🆘 Need help? Telegram: @ticket_support',
+      zh: '🆘 需要帮助？Telegram：@ticket_support',
+    },
+    keywords: ['help', 'support', 'contact', 'ជំនួយ', '客服'],
+  },
+];
 
 @Update()
 export class BotUpdate {
@@ -79,6 +166,39 @@ export class BotUpdate {
   @Action('lang:zh')
   async onLanguageChinese(@Ctx() ctx: Context) {
     await this.handleLanguageSelection(ctx, 'zh');
+  }
+
+  @InlineQuery(/.*/)
+  async onInlineQuery(@Ctx() ctx: Context): Promise<void> {
+    const language = this.getUserLanguage(ctx);
+    const query = ctx.inlineQuery?.query?.trim().toLowerCase() ?? '';
+
+    const results = INLINE_CATALOG_ITEMS.filter((item) => {
+      if (!query) {
+        return true;
+      }
+
+      const searchableFields = [
+        item.title[language],
+        item.description[language],
+        item.messageText[language],
+        ...item.keywords,
+      ].map((value) => value.toLowerCase());
+
+      return searchableFields.some((value) => value.includes(query));
+    }).map((item) => ({
+      type: 'article' as const,
+      id: item.id,
+      title: item.title[language],
+      description: item.description[language],
+      input_message_content: {
+        message_text: item.messageText[language],
+      },
+    }));
+
+    await ctx.answerInlineQuery(results, {
+      cache_time: 0,
+    });
   }
 
   private async handleLanguageSelection(
