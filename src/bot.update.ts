@@ -85,7 +85,7 @@ const INLINE_CATALOG_ITEMS: InlineCatalogItem[] = [
     ],
     thumbnailUrl: 'https://oc.utlog.net/public/travel_package/831508372.png',
     price: '$350',
-    buyUrl: '/package/domestic-12-months',
+    buyUrl: '/payment',
   },
   {
     id: 'domestic-6-months',
@@ -119,7 +119,7 @@ const INLINE_CATALOG_ITEMS: InlineCatalogItem[] = [
     ],
     thumbnailUrl: 'https://oc.utlog.net/public/travel_package/1190708355.jpg',
     price: '$175',
-    buyUrl: '/package/domestic-6-months',
+    buyUrl: '/payment',
   },
   {
     id: 'international-30-days',
@@ -156,7 +156,7 @@ const INLINE_CATALOG_ITEMS: InlineCatalogItem[] = [
     ],
     thumbnailUrl: 'https://oc.utlog.net/public/travel_package/248436554.png',
     price: '$90',
-    buyUrl: 'https://olp-express-mini-app-aba.vercel.app/payment',
+    buyUrl: '/payment',
   },
 ];
 
@@ -263,7 +263,7 @@ export class BotUpdate {
           [
             {
               text: `${PAY_LABELS[language]} ${item.price}`,
-              url: `${item.buyUrl}`,
+              url: `${this.miniAppUrl}${item.buyUrl}`,
             },
           ],
         ],
