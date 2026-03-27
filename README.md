@@ -54,6 +54,16 @@ Set one of these variables (first non-empty value is used):
 - `TELEGRAM_TOKEN`
 - `BOT_TOKEN`
 
+This service also uses:
+
+- `MINI_APP_URL` (required in production): Base URL for inline "Pay" buttons, for example `https://your-mini-app.vercel.app`.
+
+Notes:
+
+- `MINI_APP_URL` is trimmed and trailing slashes are removed automatically.
+- If `MINI_APP_URL` is missing/empty, the app falls back to `https://example.com` and logs a warning.
+- On Railway, make sure the variable is set on the correct **service** (not only at project level), then redeploy/restart the service so the new runtime environment is applied.
+
 ## Run tests
 
 ```bash

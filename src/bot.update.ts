@@ -166,6 +166,31 @@ const PAY_LABELS: Record<BotLanguage, string> = {
   zh: '支付',
 };
 
+const DEFAULT_MINI_APP_URL = 'https://example.com';
+
+function normalizeMiniAppUrl(url: string): string {
+  return url.replace(/\/+$/, '');
+}
+
+function resolveMiniAppUrl(
+  configService: ConfigService,
+  logger: Logger,
+): string {
+  const rawValue = configService.get<string>('MINI_APP_URL');
+  const miniAppUrl = rawValue?.trim();
+
+  if (!miniAppUrl) {
+    logger.warn(
+      `MINI_APP_URL is missing or empty. Falling back to ${DEFAULT_MINI_APP_URL}`,
+    );
+    return DEFAULT_MINI_APP_URL;
+  }
+
+  const normalizedMiniAppUrl = normalizeMiniAppUrl(miniAppUrl);
+  logger.log(`Using MINI_APP_URL: ${normalizedMiniAppUrl}`);
+  return normalizedMiniAppUrl;
+}
+
 @Update()
 export class BotUpdate {
   private readonly logger = new Logger(BotUpdate.name);
@@ -175,8 +200,7 @@ export class BotUpdate {
     private readonly languageService: LanguageService,
     private readonly configService: ConfigService,
   ) {
-    this.miniAppUrl =
-      this.configService.get<string>('MINI_APP_URL') ?? 'https://example.com';
+    this.miniAppUrl = resolveMiniAppUrl(this.configService, this.logger);
   }
 
   @Start()
