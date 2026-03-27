@@ -263,7 +263,7 @@ export class BotUpdate {
           [
             {
               text: `${PAY_LABELS[language]} ${item.price}`,
-              url: `${this.miniAppUrl}${item.buyUrl}`,
+              url: `${item.buyUrl}`,
             },
           ],
         ],
