@@ -166,8 +166,6 @@ const PAY_LABELS: Record<BotLanguage, string> = {
   zh: '支付',
 };
 
-const DEFAULT_MINI_APP_URL = 'https://example.com';
-
 function normalizeMiniAppUrl(url: string): string {
   return url.replace(/\/+$/, '');
 }
@@ -180,10 +178,9 @@ function resolveMiniAppUrl(
   const miniAppUrl = rawValue?.trim();
 
   if (!miniAppUrl) {
-    logger.warn(
-      `MINI_APP_URL is missing or empty. Falling back to ${DEFAULT_MINI_APP_URL}`,
+    throw new Error(
+      'Missing MINI_APP_URL. Set MINI_APP_URL in your .env file.',
     );
-    return DEFAULT_MINI_APP_URL;
   }
 
   const normalizedMiniAppUrl = normalizeMiniAppUrl(miniAppUrl);
