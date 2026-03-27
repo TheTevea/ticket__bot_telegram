@@ -174,17 +174,19 @@ function resolveMiniAppUrl(
   configService: ConfigService,
   logger: Logger,
 ): string {
-  const rawValue = configService.get<string>('MINI_APP_URL');
-  const miniAppUrl = rawValue?.trim();
+  const processEnvValue = process.env.MINI_APP_URL;
+  const configValue = configService.get<string>('MINI_APP_URL');
+  const miniAppUrl = processEnvValue?.trim() || configValue?.trim();
 
   if (!miniAppUrl) {
     throw new Error(
-      'Missing MINI_APP_URL. Set MINI_APP_URL in your .env file.',
+      'Missing MINI_APP_URL environment variable. Set MINI_APP_URL in Railway variables or .env for local development.',
     );
   }
 
   const normalizedMiniAppUrl = normalizeMiniAppUrl(miniAppUrl);
-  logger.log(`Using MINI_APP_URL: ${normalizedMiniAppUrl}`);
+  const source = processEnvValue?.trim() ? 'process.env' : 'ConfigService';
+  logger.log(`Using MINI_APP_URL from ${source}: ${normalizedMiniAppUrl}`);
   return normalizedMiniAppUrl;
 }
 
