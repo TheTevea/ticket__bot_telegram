@@ -177,7 +177,14 @@ function resolveMiniAppUrl(
   const processEnvValue = process.env.MINI_APP_URL;
   const configValue = configService.get<string>('MINI_APP_URL');
 
-  logger.debug(
+  // Log all env var names containing "MINI" or "APP" for debugging
+  const relevantEnvKeys = Object.keys(process.env).filter(
+    (key) => key.includes('MINI') || key.includes('APP'),
+  );
+  logger.log(
+    `Available env vars matching MINI/APP: [${relevantEnvKeys.join(', ')}]`,
+  );
+  logger.log(
     `MINI_APP_URL resolution: process.env="${processEnvValue ?? '(undefined)'}", configService="${configValue ?? '(undefined)'}"`,
   );
 
