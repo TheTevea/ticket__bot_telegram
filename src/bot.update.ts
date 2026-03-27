@@ -257,6 +257,9 @@ export class BotUpdate {
           `${item.description[language]}`,
         ].join('\n'),
         parse_mode: 'HTML' as const,
+        link_preview_options: {
+          show_above_text: true,
+        },
       },
       reply_markup: {
         inline_keyboard: [
