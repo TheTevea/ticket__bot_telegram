@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TelegrafModule } from 'nestjs-telegraf';
+import { resolve } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { BotUpdate } from './bot.update';
@@ -12,6 +13,8 @@ const TELEGRAM_BOT_TOKEN_KEYS = [
   'TELEGRAM_TOKEN',
   'BOT_TOKEN',
 ] as const;
+
+const ROOT_ENV_FILE_PATH = resolve(__dirname, '..', '.env');
 
 function resolveTelegramBotToken(configService: ConfigService): string {
   for (const key of TELEGRAM_BOT_TOKEN_KEYS) {
@@ -31,6 +34,7 @@ function resolveTelegramBotToken(configService: ConfigService): string {
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: ROOT_ENV_FILE_PATH,
     }),
     TelegrafModule.forRootAsync({
       imports: [ConfigModule],

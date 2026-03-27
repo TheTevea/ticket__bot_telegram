@@ -194,14 +194,12 @@ function resolveMiniAppUrl(
 @Update()
 export class BotUpdate {
   private readonly logger = new Logger(BotUpdate.name);
-  private readonly miniAppUrl: string;
+  private miniAppUrl: string | null = null;
 
   constructor(
     private readonly languageService: LanguageService,
     private readonly configService: ConfigService,
-  ) {
-    this.miniAppUrl = resolveMiniAppUrl(this.configService, this.logger);
-  }
+  ) {}
 
   @Start()
   async onStart(@Ctx() ctx: Context) {
@@ -252,6 +250,7 @@ export class BotUpdate {
   async onInlineQuery(@Ctx() ctx: Context): Promise<void> {
     const language = this.getUserLanguage(ctx);
     const query = ctx.inlineQuery?.query?.trim().toLowerCase() ?? '';
+    const miniAppUrl = this.getMiniAppUrl();
 
     const results = INLINE_CATALOG_ITEMS.filter((item) => {
       if (!query) {
@@ -287,7 +286,7 @@ export class BotUpdate {
           [
             {
               text: `${PAY_LABELS[language]} ${item.price}`,
-              url: `${this.miniAppUrl}${item.buyUrl}`,
+              url: `${miniAppUrl}${item.buyUrl}`,
             },
           ],
         ],
@@ -325,5 +324,13 @@ export class BotUpdate {
     }
 
     return this.languageService.getLanguage(userId);
+  }
+
+  private getMiniAppUrl(): string {
+    if (!this.miniAppUrl) {
+      this.miniAppUrl = resolveMiniAppUrl(this.configService, this.logger);
+    }
+
+    return this.miniAppUrl;
   }
 }
