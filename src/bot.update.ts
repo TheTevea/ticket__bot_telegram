@@ -156,7 +156,7 @@ const INLINE_CATALOG_ITEMS: InlineCatalogItem[] = [
     ],
     thumbnailUrl: 'https://oc.utlog.net/public/travel_package/248436554.png',
     price: '$90',
-    buyUrl: 'https://olp-express-mini-app-aba.vercel.app/payment',
+    buyUrl: '/package/international-30-days',
   },
 ];
 
@@ -257,9 +257,6 @@ export class BotUpdate {
           `${item.description[language]}`,
         ].join('\n'),
         parse_mode: 'HTML' as const,
-        link_preview_options: {
-          show_above_text: true,
-        },
       },
       reply_markup: {
         inline_keyboard: [
