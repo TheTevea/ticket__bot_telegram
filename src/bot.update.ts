@@ -166,6 +166,12 @@ const PAY_LABELS: Record<BotLanguage, string> = {
   zh: '支付',
 };
 
+const CUSTOM_ORDER_LABELS: Record<BotLanguage, string> = {
+  km: '🎫 បង្កើតការកក់ផ្ទាល់ខ្លួន',
+  en: '🎫 Make custom order',
+  zh: '🎫 创建自定义订单',
+};
+
 function normalizeMiniAppUrl(url: string): string {
   return url.replace(/\/+$/, '');
 }
@@ -307,6 +313,12 @@ export class BotUpdate {
 
     await ctx.answerInlineQuery(results, {
       cache_time: 0,
+      button: {
+        text: CUSTOM_ORDER_LABELS[language],
+        web_app: {
+          url: this.miniAppUrl,
+        },
+      },
     });
   }
 
