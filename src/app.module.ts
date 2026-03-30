@@ -4,7 +4,7 @@ import { TelegrafModule } from 'nestjs-telegraf';
 import { resolve } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { BotUpdate } from './bot.update';
+import { BotModule } from './bot/bot.module';
 import { LanguageService } from './language.service';
 import { TelegramBotLauncherService } from './telegram-bot-launcher.service';
 
@@ -44,13 +44,10 @@ function resolveTelegramBotToken(configService: ConfigService): string {
       }),
       inject: [ConfigService],
     }),
+    BotModule,
   ],
   controllers: [AppController],
-  providers: [
-    AppService,
-    BotUpdate,
-    LanguageService,
-    TelegramBotLauncherService,
-  ],
+  providers: [AppService, LanguageService, TelegramBotLauncherService],
+  exports: [LanguageService],
 })
 export class AppModule {}

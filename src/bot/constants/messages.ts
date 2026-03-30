@@ -1,0 +1,40 @@
+import { BotLanguage } from '../interfaces/catalog.interface';
+
+export const LANGUAGE_MENU_TEXT =
+  '🌐 Please choose your language / សូមជ្រើសរើសភាសា / 请选择语言';
+
+export const START_MESSAGES: Record<BotLanguage, string> = {
+  km: '🚌 រីករាយដែលបានជួបអ្នកនៅ Ticket Mini App! រៀបចំគម្រោងធ្វើដំណើររបស់អ្នកឱ្យកាន់តែងាយស្រួល និងរហ័ស។ ដើម្បីជ្រើសរើសជើងឡាន និងកន្លែងអង្គុយដែលអ្នកពេញចិត្ត សូមចុចប៊ូតុង "កក់សំបុត្រ" ខាងក្រោម។ សូមជូនពរឱ្យអ្នកមានដំណើរដ៏រីករាយ!',
+  en: '🚌 Welcome to Ticket Mini App! Plan your trip quickly and easily. To choose your preferred route and seat, press the "Book Ticket" button below. Have a pleasant journey!',
+  zh: '🚌 欢迎来到 Ticket Mini App！轻松快捷地规划您的行程。要选择您喜欢的车次和座位，请点击下方"预订车票"按钮。祝您旅途愉快！',
+};
+
+export const HELP_MESSAGES: Record<BotLanguage, string> = {
+  km: 'សូមស្វាគមន៍មកកាន់ Ticket Mini App។\n\nពាក្យបញ្ជា៖\n/book - កក់សំបុត្រ\n/mytickets - មើលសំបុត្ររបស់អ្នក\n/support - ទាក់ទងផ្នែកជំនួយ\n/lang - ប្ដូរភាសា\n\nដើម្បីចាប់ផ្ដើមកក់ សូមផ្ញើ /book។',
+  en: 'Welcome to Ticket Mini App.\n\nCommands:\n/book - Book a ticket\n/mytickets - View your tickets\n/support - Contact support\n/lang - Change language\n\nTo start booking, send /book.',
+  zh: '欢迎使用 Ticket Mini App。\n\n命令：\n/book - 预订车票\n/mytickets - 查看您的车票\n/support - 联系客服\n/lang - 切换语言\n\n要开始预订，请发送 /book。',
+};
+
+export const SUPPORT_MESSAGES: Record<BotLanguage, string> = {
+  km: 'ត្រូវការជំនួយមែនទេ?\n\nទាក់ទងផ្នែកជំនួយ៖\nTelegram: @ticket_support\nទូរស័ព្ទ: +855 xx xxx xxx\nអ៊ីមែល: support@yourdomain.com\nម៉ោងសេវា: ច័ន្ org-អាទិត្យ, 8:00 ព្រឹក - 8:00 យប់',
+  en: 'Need help?\n\nContact support:\nTelegram: @ticket_support\nPhone: +855 xx xxx xxx\nEmail: support@yourdomain.com\nSupport hours: Mon-Sun, 8:00 AM - 8:00 PM',
+  zh: '需要帮助吗？\n\n联系客服：\nTelegram: @ticket_support\n电话: +855 xx xxx xxx\n邮箱: support@yourdomain.com\n服务时间: 周一至周日, 8:00 AM - 8:00 PM',
+};
+
+export const LANGUAGE_CHANGED_MESSAGES: Record<BotLanguage, string> = {
+  km: '✅ ភាសាត្រូវបានប្ដូរទៅជាភាសាខ្មែរ',
+  en: '✅ Language has been changed to English',
+  zh: '✅ 语言已切换为中文',
+};
+
+export const PAY_LABELS: Record<BotLanguage, string> = {
+  km: 'Pay',
+  en: 'Pay',
+  zh: '支付',
+};
+
+export const CUSTOM_ORDER_LABELS: Record<BotLanguage, string> = {
+  km: '🎫 បង្កើតការកក់ផ្ទាល់ខ្លួន',
+  en: '🎫 Make custom order',
+  zh: '🎫 创建自定义订单',
+};
