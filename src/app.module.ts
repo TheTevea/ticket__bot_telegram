@@ -5,7 +5,6 @@ import { resolve } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { BotModule } from './bot/bot.module';
-import { LanguageService } from './language.service';
 import { TelegramBotLauncherService } from './telegram-bot-launcher.service';
 
 const TELEGRAM_BOT_TOKEN_KEYS = [
@@ -47,7 +46,6 @@ function resolveTelegramBotToken(configService: ConfigService): string {
     BotModule,
   ],
   controllers: [AppController],
-  providers: [AppService, LanguageService, TelegramBotLauncherService],
-  exports: [LanguageService],
+  providers: [AppService, TelegramBotLauncherService],
 })
 export class AppModule {}
